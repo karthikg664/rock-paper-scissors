@@ -1,55 +1,105 @@
-function getComputerChoice(min, max) {
+//Global variables
+let humanScore = 0;
+let computerScore = 0;
 
-    const minCeiled = Math.ceil(min);
-    const maxFloored = Math.floor(max);
-    const choice = Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+//Get DOM elements
+const humanChoiceDisplay = document.querySelector("#human-choice-display");
+const computerChoiceDisplay = document.querySelector("#computer-choice-display");
+const messageDisplay = document.querySelector("#msg");
+const humanScoreDisplay = document.querySelector("#human-score");
+const computerScoreDisplay = document.querySelector("#computer-score");
+const container = document.querySelector("#container");
 
-    if (choice === 1) {
-        return "Rock";
-    } else if (choice === 2) {
-        return "Paper";
+function getComputerChoice() {
+    const choices = ["Rock", "Paper", "Scissors"];
+    const randomIndex = Math.floor(Math.random() * choices.length);
+    return choices[randomIndex];
+};
+
+function updateScoreBoard() {
+    humanScoreDisplay.textContent = `Your score ${humanScore}`;
+    computerScoreDisplay.textContent = `Computer score ${computerScore}`;
+};
+
+function playGame(humanSelection) {
+    const computerSelection = getComputerChoice();
+
+    //Dicplay choices
+    humanChoiceDisplay.textContent = `YOU CHOOSE: ${humanSelection}`;
+    computerChoiceDisplay.textContent = `COMPUTER CHOOSE: ${computerSelection}`;
+
+    let roundMessage = "";
+
+    if (humanSelection === computerSelection) {
+        roundMessage = "It's a Tie!";
+    } else if (
+        (humanSelection === "Rock" && computerSelection === "Scissors") ||
+        (humanSelection === "Paper" && computerSelection === "Rock") ||
+        (humanSelection === "Scissors" && computerSelection === "Paper")
+    ) {
+        roundMessage = `You Win! ${humanSelection} beats ${computerSelection}`;
+        humanScore++;
     } else {
-        return "Scissors";
+        roundMessage = `You Lost! ${computerSelection} beats ${humanSelection}`;
+        computerScore++;
     }
-}
 
+    //Display message and Update Score
+    messageDisplay.textContent = roundMessage;
+    updateScoreBoard();
+
+    //game end
+    if (humanScore === 5) {
+        messageDisplay.textContent = "Congratulations! You Won the game!";
+        disableButtons();
+    } else if (computerScore === 5) {
+        messageDisplay.textContent = "Oh no! The computer won the game!";
+        disableButtons();
+    }
+};
+
+//disablebuttons function
+function disableButtons() {
+    const btns = document.querySelectorAll(".btn");
+    btns.forEach(button => {
+        button.disabled = true;
+        button.style.opacity = 0.5;
+    });
+};
+
+//enablebuttons function
+
+function enableButtons() {
+    const btns = document.querySelectorAll(".btn");
+    btns.forEach(button => {
+        button.disabled = false;
+        button.style.opacity = 1;
+    });
+};
+
+//Event listeners
 const btns = document.querySelectorAll(".btn");
 btns.forEach(button => {
     button.addEventListener("click", (event) => {
         const humanChoice = event.target.textContent;
-        const computerChoice = getComputerChoice(0, 4);
-        playGame(humanChoice, computerChoice);
+        playGame(humanChoice);
     });
 });
 
-function playGame(Hchoice, Cchoice) {
-    let humanScore = 0;
-    let computerScore = 0;
-    let tieScore = 0;
+updateScoreBoard();
 
+//Reset button
+const resetbtn = document.createElement("button");
+resetbtn.textContent = "Reset Game";
+resetbtn.id = "reset-btn";
+container.appendChild(resetbtn);
 
-    if (Hchoice === Cchoice) {
-        alert("Tie! Try again");
-        tieScore += 1;
-    } else if (Hchoice === "Rock" && Cchoice === "Paper") {
-        alert("You lose! Paper beats Rock");
-        computerScore += 1;
-    } else if (Hchoice === "Paper" && Cchoice === "Scissors") {
-        alert("You lose! Scissors beats Paper");
-        computerScore += 1;
-    } else if (Hchoice === "Scissors" && Cchoice === "Rock") {
-        alert("You lose! Rock beats Scissors");
-        computerScore += 1;
-    } else {
-        alert(`You Win! ${Hchoice} beats ${Cchoice}`);
-        humanScore += 1;
-    }
-
-    // if (humanScore > computerScore) {
-    //     console.log(`You win the game with ${humanScore - computerScore} points!!!`);
-    // } else if (computerScore > humanScore) {
-    //     console.log(`You loose the game with ${computerScore - humanScore} points!!!`);
-    // } else {
-    //     console.log(`!!!Tie with ${tieScore}!!!`);
-    // }
-}
+resetbtn.addEventListener("click", () => {
+    humanScore = 0;
+    computerScore = 0;
+    updateScoreBoard();
+    messageDisplay.textContent = "Make your move!";
+    humanChoiceDisplay.textContent = "YOU CHOOSE: ";
+    computerChoiceDisplay.textContent = "COMPUTER CHOOSE: ";
+    enableButtons();
+});

@@ -1,16 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
     <script rel="script" src="./script.js" defer></script>
+    <link rel="stylesheet" href="./style.css">
+    <title>Game</title>
+</head>
+
+<body>
     <div id="container">
-        <button class="btn">Rock</button>
-        <button class="btn">Paper</button>
-        <button class="btn">Scissors</button>
+        <h1 id="title">Rock-Paper-Scissors</h1>
+        <div id="btn-container">
+            <button class="btn" id="rock">Rock</button>
+            <button class="btn" id="paper">Paper</button>
+            <button class="btn" id="scissors">Scissors</button>
+        </div>
+
+        <div id="result">
+            <div id="choice">
+                <p class="para" id="human-choice-display">YOU CHOOSE: </p>
+                <p class="para" id="computer-choice-display">COMPUTER CHOOSE: </p>
+            </div>
+            <p class="para" id="msg">Make your move!</p>
+            <h2 class="section-title">SCORE BOARD</h2> 
+            <ul id="score-board">
+                <li>Round</li>
+                <li id="human-score">Your score: 0</li>
+                <li id="computer-score">Computer score: 0</li>
+            </ul>
+        </div>
     </div>
 </body>
-</html> 
+
+</html>
